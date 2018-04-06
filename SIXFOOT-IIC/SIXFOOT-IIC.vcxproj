@@ -150,8 +150,9 @@
     <ClCompile Include="C:\Users\50312\AppData\Local\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.stm32\STM32F4xxxx\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_usb.c" />
     <ClCompile Include="C:\Users\50312\AppData\Local\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.stm32\STM32F4xxxx\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_utils.c" />
     <ClCompile Include="delay.cpp" />
-    <ClCompile Include="IIC.c" />
     <ClCompile Include="LEDBlink.cpp" />
+    <ClCompile Include="OLEDUPT.c" />
+    <ClCompile Include="SPI.c" />
     <ClCompile Include="system_stm32f4xx.c" />
   </ItemGroup>
   <ItemGroup>
@@ -269,7 +270,8 @@
     <ClInclude Include="C:\Users\50312\AppData\Local\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.stm32\STM32F4xxxx\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_utils.h" />
     <ClInclude Include="C:\Users\50312\AppData\Local\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.stm32\STM32F4xxxx\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_wwdg.h" />
     <ClInclude Include="delay.h" />
-    <ClInclude Include="IIC.h" />
+    <ClInclude Include="OLEDUPT.h" />
+    <ClInclude Include="SPI.h" />
     <ClInclude Include="stm32f4xx_hal_conf.h" />
   </ItemGroup>
   <ItemGroup>

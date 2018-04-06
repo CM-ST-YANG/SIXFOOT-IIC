@@ -44,9 +44,6 @@
     <ClCompile Include="C:\Users\50312\AppData\Local\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.stm32\STM32F4xxxx\StartupFiles\startup_stm32f407xx.c">
       <Filter>Source files\Device-specific files</Filter>
     </ClCompile>
-    <ClCompile Include="IIC.c">
-      <Filter>Resource files</Filter>
-    </ClCompile>
     <ClCompile Include="delay.cpp">
       <Filter>Resource files</Filter>
     </ClCompile>
@@ -304,6 +301,12 @@
     </ClCompile>
     <ClCompile Include="C:\Users\50312\AppData\Local\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.stm32\STM32F4xxxx\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_utils.c">
       <Filter>Source files\Device-specific files\HAL</Filter>
+    </ClCompile>
+    <ClCompile Include="SPI.c">
+      <Filter>Resource files</Filter>
+    </ClCompile>
+    <ClCompile Include="OLEDUPT.c">
+      <Filter>Resource files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -649,10 +652,13 @@
     <ClInclude Include="C:\Users\50312\AppData\Local\VisualGDB\EmbeddedBSPs\arm-eabi\com.sysprogs.arm.stm32\STM32F4xxxx\CMSIS_HAL\RTOS\Template\cmsis_os.h">
       <Filter>Header files\Device-specific files\HAL</Filter>
     </ClInclude>
-    <ClInclude Include="IIC.h">
+    <ClInclude Include="delay.h">
       <Filter>Resource files</Filter>
     </ClInclude>
-    <ClInclude Include="delay.h">
+    <ClInclude Include="SPI.h">
+      <Filter>Resource files</Filter>
+    </ClInclude>
+    <ClInclude Include="OLEDUPT.h">
       <Filter>Resource files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -144,7 +144,7 @@ void IIC_Send_Byte(uint8_t txd)
  @Input             ack 
  @Return            Ëù¶ÁÊı¾İ 
 ***************************************************************/  
-uint8_t IIC_Read_Byte(unsigned char ack)  
+uint8_t IIC_Read_Byte(unsigned char ack) 
 {  
 	unsigned char i, receive = 0;  
       
