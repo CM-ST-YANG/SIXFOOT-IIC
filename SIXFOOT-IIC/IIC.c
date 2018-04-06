@@ -1,149 +1,172 @@
+
 #include <IIC.h>
 #include <delay.h>
-GPIO_InitTypeDef iic1;
-GPIO_InitTypeDef RST;
-
-void IIC_INIT()
-{
-	__HAL_RCC_GPIOB_CLK_ENABLE();
-	iic1.Pin = GPIO_PIN_6 | GPIO_PIN_7;
-	iic1.Mode = GPIO_MODE_OUTPUT_OD;
-	iic1.Pull = GPIO_PULLUP;
-	iic1.Speed = GPIO_SPEED_FREQ_MEDIUM;
-	HAL_GPIO_Init(GPIOB, &iic1); 
-	IIC_SDA(HIGH);
-	IIC_SCL(HIGH);
-}
-
-void RST_INIT()
-{
-	__HAL_RCC_GPIOB_CLK_ENABLE();
-	iic1.Pin = GPIO_PIN_5;
-	iic1.Mode = GPIO_MODE_OUTPUT_PP;
-	iic1.Pull = GPIO_NOPULL;
-	iic1.Speed = GPIO_SPEED_FREQ_MEDIUM;
-	HAL_GPIO_Init(GPIOB, &iic1); 
-}
-
-void IIC_START()
-{
-	SDA1_OUT();
-	IIC_SDA(HIGH);
-	IIC_SCL(HIGH);
-	delay_us(4);
-	IIC_SDA(LOW);
-	delay_us(4);
-	IIC_SCL(LOW);	
-}
-
-void IIC_STOP()
-{
-	SDA1_OUT();
-	IIC_SDA(LOW);
-	IIC_SCL(HIGH);
-	delay_us(4);
-	IIC_SDA(HIGH);
-	delay_us(4);
-}
-
-uint8_t IIC_WAIT_ACK()
-{
-	uint8_t AckTime;
-	SDA1_IN();
-	IIC_SDA(HIGH);
-	delay_us(1);
-	IIC_SCL(HIGH);
-	delay_us(1);
-	while (READ_SDA)
-	{
-		AckTime++;
-		if (AckTime > 250)
-		{
-			IIC_STOP();
-			return 1;
-		}
-	}
-	IIC_SCL(LOW);
-	return 0;
-}
-
-void IIC_ACK()
-{
-	SDA1_OUT();
-	IIC_SDA(LOW);
-	IIC_SCL(LOW);
-	delay_us(2);
-	IIC_SCL(HIGH);
-	delay_us(2);
-	IIC_SCL(LOW);
-}
-
-void IIC_NACK()
-{
-	SDA1_OUT();
-	IIC_SCL(LOW);
-	IIC_SDA(HIGH);
-	delay_us(2);
-	IIC_SCL(HIGH);
-	delay_us(2);
-	IIC_SCL(LOW);
-}
-
-void IIC_SEND_BATE(uint8_t txd)
-{
-	uint8_t t;
-	SDA1_OUT();
-	IIC_SCL(LOW);
-	for (t = 0;t < 8;t++)
-	{
-		IIC_SDA((txd & 0x80) >> 7); 
-		txd <<= 1; 
-		delay_us(2); 
-		IIC_SCL(HIGH);
+void IIC_Init(void)  
+{  
+	GPIO_InitTypeDef GPIO_Initure;  
+      
+	__HAL_RCC_GPIOH_CLK_ENABLE();                                   //使能GPIOH时钟  
+      
+	/* PH4,5初始化设置 */  
+	GPIO_Initure.Pin = GPIO_PIN_4 | GPIO_PIN_5;  
+	GPIO_Initure.Mode = GPIO_MODE_OUTPUT_PP;                        //推挽输出  
+	GPIO_Initure.Pull = GPIO_PULLUP;                                //上拉  
+	GPIO_Initure.Speed = GPIO_SPEED_FAST;                           //快速  
+	HAL_GPIO_Init(GPIOH, &GPIO_Initure);  
+      
+	IIC_SDA(HIGH);  
+	IIC_SCL(HIGH);  
+}  
+  
+/*************************************************************** 
+ @Function          void IIC_Start(void) 
+ @Description       产生IIC起始信号 
+                    SCL : HIGH 
+                    SDA : HIGH -> LOW 
+ @Input             void 
+ @Return            void 
+***************************************************************/  
+void IIC_Start(void)  
+{  
+	SDA_OUT();                                                      //sda线输出  
+	IIC_SDA(HIGH);  
+	IIC_SCL(HIGH);  
+	delay_us(4);  
+	IIC_SDA(LOW);       //START : when CLK is high,DATA change form high to low  
+	delay_us(4);  
+	IIC_SCL(LOW);                                                   //钳住I2C总线,准备发送或接收数据   
+}  
+  
+/*************************************************************** 
+ @Function          void IIC_Stop(void) 
+ @Description       产生IIC停止信号 
+                    SCL : HIGH 
+                    SDA : LOW -> HIGH 
+ @Input             void 
+ @Return            void 
+***************************************************************/  
+void IIC_Stop(void)  
+{  
+	SDA_OUT();                                                      //sda线输出  
+	IIC_SDA(LOW);  
+	IIC_SCL(HIGH);  
+	delay_us(4);  
+	IIC_SDA(HIGH);      //STOP : when CLK is high,DATA change form low to high  
+	delay_us(4);  
+}  
+  
+/*************************************************************** 
+ @Function          u8 IIC_Wait_Ack(void) 
+ @Description       等待ACK信号到来 
+ @Input             void 
+ @Return            1 : 接收应答失败 
+                    0 : 接收应答成功 
+***************************************************************/  
+uint8_t IIC_Wait_Ack(void)  
+{  
+	uint8_t ucErrTime = 0;  
+      
+	SDA_IN();                                                       //SDA设置为输入  
+	IIC_SDA(HIGH);delay_us(1);  
+	IIC_SCL(HIGH);delay_us(1);  
+	while (READ_SDA) {  
+		ucErrTime++;  
+		if (ucErrTime > 250) {  
+			IIC_Stop();  
+			return 1;  
+		}  
+	}  
+	IIC_SCL(LOW);                                                   //时钟输出0  
+	return 0;  
+}  
+  
+/*************************************************************** 
+ @Function          void IIC_Ack(void) 
+ @Description       产生ACK应答 
+ @Input             void 
+ @Return            void 
+***************************************************************/  
+void IIC_Ack(void)  
+{  
+	SDA_OUT();                                                      //sda线输出  
+	IIC_SCL(LOW);  
+	IIC_SDA(LOW);  
+	delay_us(2);  
+	IIC_SCL(HIGH);  
+	delay_us(2);  
+	IIC_SCL(LOW);  
+}  
+  
+/*************************************************************** 
+ @Function          void IIC_NAck(void) 
+ @Description       不产生ACK应答 
+ @Input             void 
+ @Return            void 
+***************************************************************/  
+void IIC_NAck(void)  
+{  
+	SDA_OUT();                                                      //sda线输出  
+	IIC_SCL(LOW);  
+	IIC_SDA(HIGH);  
+	delay_us(2);  
+	IIC_SCL(HIGH);  
+	delay_us(2);  
+	IIC_SCL(LOW);  
+}  
+  
+/*************************************************************** 
+ @Function          void IIC_Send_Byte(u8 txd) 
+ @Description       IIC发送一个字节 
+ @Input             txd : 发送数据 
+ @Return            void 
+***************************************************************/  
+void IIC_Send_Byte(uint8_t txd)  
+{  
+	uint8_t t;  
+      
+	SDA_OUT();                                                      //sda线输出  
+	IIC_SCL(LOW);                                                   //拉低时钟开始数据传输  
+	for (t = 0; t < 8; t++)  
+	{  
+		IIC_SDA((txd & 0x80) >> 7);  
+		txd <<= 1;  
+		delay_us(10);  
+		IIC_SCL(HIGH);  
 		delay_us(2);  
 		IIC_SCL(LOW);  
-		delay_us(2);
-	}
-}
-
-uint8_t IIC_READ_BYTE(unsigned char ack)
-{
-	unsigned char i, receive = 0;
-	SDA1_IN();
-	for (i = 0; i < 8; i++) 
-	{
+		delay_us(2);  
+	}  
+}  
+  
+/*************************************************************** 
+ @Function          u8 IIC_Read_Byte(unsigned char ack) 
+ @Description       读1个字节,ack=1时,发送ACK,ack=0,发送nACK 
+ @Input             ack 
+ @Return            所读数据 
+***************************************************************/  
+uint8_t IIC_Read_Byte(unsigned char ack)  
+{  
+	unsigned char i, receive = 0;  
+      
+	SDA_IN();                                                       //SDA设置为输入  
+	for (i = 0; i < 8; i++)  
+	{  
 		IIC_SCL(LOW);  
-		delay_us(2);
-		IIC_SCL(HIGH);
+		delay_us(2);  
+		IIC_SCL(HIGH);  
 		receive <<= 1;  
-		if (READ_SDA) receive++; 
-		delay_us(1); 
-	}
-	if (!ack) IIC_NACK(); 
-	else IIC_ACK();
-	return receive;
-}
+		if (READ_SDA) receive++;  
+		delay_us(1);  
+	}  
+	if (!ack)  
+		IIC_NAck();                                                 //发送nACK  
+	else  
+		IIC_Ack();                                                  //发送ACK  
+      
+	return receive;  
+}  
+  
+/******************************** END OF FLEE **********************************/  
 
-void WriteCmd(uint8_t command)
-{
-	IIC_START();
-	IIC_SEND_BATE(0x78);//OLED地址
-	IIC_WAIT_ACK();
-	IIC_SEND_BATE(0x00);//寄存器地址
-	IIC_WAIT_ACK();
-	IIC_SEND_BATE(command);
-	IIC_WAIT_ACK();
-	IIC_STOP();
-}
-
-void WriteDat(uint8_t data)
-{
-	IIC_START();
-	IIC_SEND_BATE(0x78);//OLED地址
-	IIC_WAIT_ACK();
-	IIC_SEND_BATE(0x40);//寄存器地址
-	IIC_WAIT_ACK();
-	IIC_SEND_BATE(data);
-	IIC_WAIT_ACK();
-	IIC_STOP();
-}
+  
+    
