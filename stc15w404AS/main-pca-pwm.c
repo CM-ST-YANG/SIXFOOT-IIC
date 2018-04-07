@@ -32,7 +32,7 @@ PWM频率 = MAIN_Fosc / PWM_DUTY, 假设 MAIN_Fosc = 24MHZ, PWM_DUTY = 6000, 则输出P
 
 u16	pwm0,pwm1,pwm2;
 int i=0;
-u8 time=4;
+u8 time=5;
 
 /*************	本地函数声明	**************/
 
@@ -117,24 +117,29 @@ void main(void)
 	while (1)
 	{	i=SPI_RxCnt-1;
 	   
-	   for(time=4;time>0;time--)
+	   for(time=5;time>0;time--)
          { 
-		   if (!SPI_RxBuffer[i]) break;
-		   else if(i==0) i=SPI_BUF_LENTH;
-		    else   i--;
-
-		  }
-		 i=i-4;
-		 if(i<0) i=i+SPI_BUF_LENTH;
-		 if(SPI_RxBuffer[i]==0xff)
+		   if (!SPI_RxBuffer[i]) 
 		   {
+		     i=i-4;
+		     if(i<0) i=i+SPI_BUF_LENTH;
+		     if(SPI_RxBuffer[i]==0xff)
+		      {
 		     	pwm0 = SPI_RxBuffer[++i]*10;	
 				pwm1 = SPI_RxBuffer[++i]*10;
 				pwm2 = SPI_RxBuffer[++i]*10;
 				PWMn_Update(PCA0,pwm0);
 				PWMn_Update(PCA1,pwm1);
 				PWMn_Update(PCA2,pwm2);
+		      }
+			  break;
 		   }
+		   
+		   else if(i==0) i=SPI_BUF_LENTH;
+		   else   i--;
+
+		  }
+		 
 	      
 
 //		delay_ms(2);
