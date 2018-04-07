@@ -61,7 +61,7 @@ void AccelInit(void)
 	
 	__GPIOE_CLK_ENABLE();
 	
-	GPIO_Init.Pin   = GPIO_PIN_1 | GPIO_PIN_3 | GPIO_PIN_5|GPIO_PIN_11 | GPIO_PIN_13 | GPIO_PIN_15;
+	GPIO_Init.Pin   = GPIO_PIN_1 | GPIO_PIN_3 | GPIO_PIN_5|GPIO_PIN_11 | GPIO_PIN_13 | GPIO_PIN_15;  //片选信号
 	GPIO_Init.Mode  = GPIO_MODE_OUTPUT_PP;
 	GPIO_Init.Pull  = GPIO_PULLDOWN;
 	GPIO_Init.Speed = GPIO_SPEED_MEDIUM;
@@ -79,7 +79,7 @@ void spi1_init(void)
 												
 	__GPIOA_CLK_ENABLE();//(##) I2S pins configuration:
 	
-	GPIO_Init.Pin   = GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7;
+	GPIO_Init.Pin   = GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7; //GPIO5为时钟线
 	GPIO_Init.Mode  = GPIO_MODE_AF_PP;
 	GPIO_Init.Pull  = GPIO_PULLDOWN;
 	GPIO_Init.Speed = GPIO_SPEED_MEDIUM;
@@ -90,17 +90,17 @@ void spi1_init(void)
 	
 	hspi1.Instance = SPI1;
 	
-	hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
-	hspi1.Init.Direction = SPI_DIRECTION_2LINES;
-	hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
-	hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
-	hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLED;
-	hspi1.Init.CRCPolynomial = 7;
-	hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
-	hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
-	hspi1.Init.NSS = SPI_NSS_SOFT;
-	hspi1.Init.TIMode = SPI_TIMODE_DISABLED;
-	hspi1.Init.Mode = SPI_MODE_MASTER;
+	hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;  //波特率分频
+	hspi1.Init.Direction = SPI_DIRECTION_2LINES; //方向为全双工
+	hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;     //时钟相位
+	hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;    //时钟记性
+	hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLED;  //不采用CRC计算
+	hspi1.Init.CRCPolynomial = 7;   //crc多项式
+	hspi1.Init.DataSize = SPI_DATASIZE_8BIT;  //数据宽度
+	hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;   //高位先发
+	hspi1.Init.NSS = SPI_NSS_SOFT;  //片选为软件模式
+	hspi1.Init.TIMode = SPI_TIMODE_DISABLED;   //SPI操作模式
+	hspi1.Init.Mode = SPI_MODE_MASTER; //主机模式
 
 //	state = HAL_SPI_Init(&hspi1);
 //	

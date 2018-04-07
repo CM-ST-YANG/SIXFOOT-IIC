@@ -15,7 +15,7 @@ void SysTick_Handler(void)
 
 int main(void)
 {
-	HAL_Init();
+	HAL_Init();	
 	spi1_init();
 	while (1);
 }
