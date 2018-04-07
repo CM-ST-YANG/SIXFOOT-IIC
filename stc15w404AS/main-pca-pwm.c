@@ -114,8 +114,18 @@ void main(void)
 
 	EA = 1;
 	
+	SPI_WriteToTxBuf(0x55);
+	SPI_WriteToTxBuf(0x55);
+	SPI_WriteToTxBuf(0x55);
+	SPI_WriteToTxBuf(0x55);
+	SPI_WriteToTxBuf(0x55);
 	while (1)
-	{	i=SPI_RxCnt-1;
+	{	
+	  if(SPI_RxTimerOut > 0)
+	  {
+	   SPI_RxTimerOut=0;
+	   SPI_WriteToTxBuf(0x55);
+	   i=SPI_RxCnt-1;
 	   
 	   for(time=5;time>0;time--)
          { 
@@ -139,7 +149,7 @@ void main(void)
 		   else   i--;
 
 		  }
-		 
+		  }
 	      
 
 //		delay_ms(2);
