@@ -150,3 +150,11 @@ void SET_CS(uint16_t val)
 
 }
 
+void SIXFOOT_SENT(uint8_t SFSPI[5], uint8_t recieve[5])
+{
+	int i=0;
+	for (i = 0;i < 5;i++)
+	{
+		recieve[i] = SPI1_WriteRead(SFSPI[i]);
+	}
+}

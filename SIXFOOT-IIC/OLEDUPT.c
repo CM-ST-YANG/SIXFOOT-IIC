@@ -4,7 +4,7 @@
 #include "SPI.h"
 
 extern uint16_t SPI_CS;
-
+extern uint8_t SFSPI[5], recieve[5];
 TIM_HandleTypeDef htim3;
 
 void tim3_init(void)
@@ -56,4 +56,5 @@ uint32_t tim4_cnt;
 void  TIM3_Handler(void)
 {	
 	SET_CS(SPI_CS);
+	SIXFOOT_SENT(SFSPI,recieve);
 }

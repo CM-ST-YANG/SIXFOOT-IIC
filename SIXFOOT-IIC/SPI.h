@@ -32,6 +32,7 @@ extern "C" {
 	void SET_CS(uint16_t val);
 	void spi1_init(void);
 	uint8_t SPI1_WriteRead(uint8_t Byte);
+	void SIXFOOT_SENT(uint8_t SFSPI[5], uint8_t recieve[5]);
 
 #ifdef __cplusplus
 }
